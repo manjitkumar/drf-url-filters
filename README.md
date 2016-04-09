@@ -99,7 +99,7 @@ class PlayersViewSet(FiltersMixin, viewsets.ModelViewSet):
 
         # update filters dict with incoming query params and then pass as
         # **kwargs to queryset.filter()
-        db_filters.update(
+         db_filters.update(
             self.get_queryset_filters(
                 query_params
             )
