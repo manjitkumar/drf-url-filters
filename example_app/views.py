@@ -50,7 +50,8 @@ class PlayersViewSet(FiltersMixin, viewsets.ModelViewSet):
         # This dict will hold filter kwargs to pass in to Django ORM calls.
         db_filters = {}
 
-        # filters on mercant queryset
+        # update filters dict with incoming query params and then pass as
+        # **kwargs to queryset.filter()
         db_filters.update(
             self.get_queryset_filters(
                 query_params
