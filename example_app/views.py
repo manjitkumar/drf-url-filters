@@ -40,7 +40,7 @@ class PlayersViewSet(FiltersMixin, viewsets.ModelViewSet):
     def get_queryset(self):
         """
         Optionally restricts the queryset by filtering against
-        a `name` query parameter in the URL.
+        query parameters in the URL.
         """
         query_params = self.request.query_params
         queryset = Player.objects.prefetch_related(
@@ -88,7 +88,7 @@ class TeamsViewSet(FiltersMixin, viewsets.ModelViewSet):
     def get_queryset(self):
         """
         Optionally restricts the queryset by filtering against
-        a `name` query parameter in the URL.
+        query parameters in the URL.
         """
         query_params = self.request.query_params
         queryset = Team.objects.prefetch_related(
