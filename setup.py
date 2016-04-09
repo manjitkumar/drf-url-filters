@@ -1,7 +1,7 @@
+from setuptools import setup
 import os
 import sys
 sys.path.insert(0, '.')
-from setuptools import setup
 
 try:
     import atexit
