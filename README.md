@@ -1,7 +1,7 @@
 # drf-url-filters
 
 **drf-url-filters** is a simple django app to apply filters on drf modelviewset's
-queryset in a clean, simple and configureable way. It also supports validations
+queryset in a clean, simple and configurable way. It also supports validations
 on incoming query params and their values. A beautiful python package voluptouos is being used for validations on the incoming query parameters. The best part about voluptouos is you can define your own validations as per your query params requirements.
 
 # Quick start

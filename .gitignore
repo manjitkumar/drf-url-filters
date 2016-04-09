@@ -80,3 +80,5 @@ local_settings.py
 # .DS_Store
 .DS_Store
 
+# dist
+dist/
