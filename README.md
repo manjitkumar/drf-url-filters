@@ -18,71 +18,93 @@ on incoming query params and their values. A beautiful python package voluptouos
 
 2. To apply filters using `drf-url-filters` we need to configure our view to have a dict mapping `filter_mappings` which converts incoming query parameters to query you want to make on the column name on the queryset. 
 
-```python
 # validations.py
+
+```python
+
+from filters.schema import base_query_param_schema
 from filters.validations import (
     CSVofIntegers,
     IntegerLike,
     DatetimeWithTZ
 )
 
-from filters.schema import base_query_param_schema
-
+# make a validation schema for players filter query params
 players_query_schema = base_query_param_schema.extend(
     {
-        "id": IntegerLike()
+        "id": IntegerLike(),
         "name": unicode,
-        "team_id": CSVofIntegers(),
-        "install_ts" :DatetimeWithTZ(),
+        "team_id": CSVofIntegers(),  # /?team_id=1,2,3
+        "install_ts": DatetimeWithTZ(),
         "update_ts": DatetimeWithTZ(),
     }
 )
+```
 
 # views.py
-from rest_framework import viewsets
-from filters.mixins import FiltersMixin
-from .models import Players
-from .serializers import PlayersViewSet
-from .validations import players_query_schema
+
+```python
+
+from rest_framework import (
+    viewsets,
+    filters,
+)
+
+from .models import Player, Team
+from .serializers import PlayerSerializer, TeamSerializer
+from .pagination import ResultSetPagination
+from .validations import teams_query_schema, players_query_schema
+from filters.mixins import (
+    FiltersMixin,
+)
 
 
 class PlayersViewSet(FiltersMixin, viewsets.ModelViewSet):
     """
-    This viewset automatically provides `list`, `create`,
-    `retrieve`, `update` and `destroy` actions.
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
     """
-    serializer_class = PlayersSerializer
-    pagination_class = PlayersPagination
-    
-    # add a mapping of query_params to db_columns(queries) 
+    serializer_class = PlayerSerializer
+    pagination_class = ResultSetPagination
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('id', 'name', 'update_ts')
+    ordering = ('id',)
+
+    # add a mapping of query_params to db_columns(queries)
     filter_mappings = {
         'id': 'id',
         'name': 'name__icontains',
-        'team_id': 'teams',  # considering a many-to-many related field
+        'team_id': 'teams',
         'install_ts': 'install_ts',
         'update_ts': 'update_ts',
         'update_ts__gte': 'update_ts__gte',
         'update_ts__lte': 'update_ts__lte',
     }
+
     # add validation on filters
     filter_validation_schema = players_query_schema
-    
+
     def get_queryset(self):
         """
         Optionally restricts the queryset by filtering against
-        query parameters in the URL.
+        a `name` query parameter in the URL.
         """
         query_params = self.request.query_params
-        queryset = Players.objects.all()
+        queryset = Player.objects.prefetch_related(
+            'teams'  # use prefetch_related to minimize db hits.
+        ).all()
+
         # This dict will hold filter kwargs to pass in to Django ORM calls.
         db_filters = {}
-        # update filters on players queryset using FiltersMixin.get_queryset_filters
+
+        # filters on mercant queryset
         db_filters.update(
             self.get_queryset_filters(
                 query_params
             )
         )
         return queryset.filter(**db_filters)
+
 ```
 
 With the use of `drf-url-filters` adding a new filter on a new column is as simple as adding a new key in the dict. Prohibitting a filter on particular column is same as removing a a key value mapping from the `filter_mappings` dict.
