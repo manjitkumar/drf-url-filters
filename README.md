@@ -10,7 +10,7 @@ on incoming query params and their values. A beautiful python package voluptouos
 
 1. Download `drf-url-filters` app package from this git repo or can be isnatlled using python-pip like `pip install drf-url-filters`.
 
-2. Add `filters` in INSTALLED_APPS in settings.py file of django project.
+2. Add `filters` in INSTALLED_APPS of settings.py file of django project.
 
 **How it works?**
 
@@ -99,7 +99,7 @@ class PlayersViewSet(FiltersMixin, viewsets.ModelViewSet):
 
         # update filters dict with incoming query params and then pass as
         # **kwargs to queryset.filter()
-         db_filters.update(
+        db_filters.update(
             self.get_queryset_filters(
                 query_params
             )
@@ -108,4 +108,16 @@ class PlayersViewSet(FiltersMixin, viewsets.ModelViewSet):
 
 ```
 
-With the use of `drf-url-filters` adding a new filter on a new column is as simple as adding a new key in the dict. Prohibitting a filter on particular column is same as removing a a key value mapping from the `filter_mappings` dict.
+With the use of `drf-url-filters` adding a new filter on a new column is as simple as adding a new key in the dict. Prohibitting a filter on particular column is same as removing a key value mapping from the `filter_mappings` dict.
+
+
+# LICENSE
+The content of this repository is licensed under a The MIT License (MIT)
+Copyright (c) 2016 Manjit Kumar
+Read more about it in LICENSE file available in repo.
+
+# Credits
+Special thanks to authors of [voluptouos](https://github.com/alecthomas/voluptuous) and friends [*](https://github.com/cdax) [**](https://github.com/SaurabhJha) who encourage people to contribute into open source community.
+
+# Support
+Please [open an issue](https://github.com/manjitkumar/drf-url-filters/issues/new) for support.
