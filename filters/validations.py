@@ -106,7 +106,7 @@ def CSVofIntegers(msg=None):
                     value = map(
                         int, filter(
                             bool, map(
-                                lambda x: x.strip(), s.split(',')
+                                lambda x: x.strip(), value.split(',')
                             )
                         )
                     )
