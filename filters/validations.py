@@ -103,7 +103,13 @@ def CSVofIntegers(msg=None):
         try:
             if isinstance(value, unicode):
                 if ',' in value:
-                    value = map(int, filter(bool, value.split(',')))
+                    value = map(
+                        int, filter(
+                            bool, map(
+                                lambda x: x.strip(), value.split(',')
+                            )
+                        )
+                    )
                     return value
                 else:
                     return int(value)
