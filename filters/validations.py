@@ -96,8 +96,8 @@ def DatetimeWithTZ(msg=None):
 def CSVofIntegers(msg=None):
     '''
     Checks whether a value is list of integers.
-    Returns list of integers or just an integer
-    if there is only one element in list.
+    Returns list of integers or just one integer in 
+    list if there is only one element in given CSV string.
     '''
     def fn(value):
         try:
@@ -110,9 +110,9 @@ def CSVofIntegers(msg=None):
                             )
                         )
                     )
-                    return value
+                    return [int(value)]
                 else:
-                    return int(value)
+                    return [int(value)]
         except ValueError:
             raise Invalid(
                 '<{0}> is not a valid csv of integers'.format(value)
