@@ -110,7 +110,7 @@ def CSVofIntegers(msg=None):
                             )
                         )
                     )
-                    return [int(value)]
+                    return value
                 else:
                     return [int(value)]
         except ValueError:
