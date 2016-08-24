@@ -26,6 +26,10 @@ lib64/
 parts/
 sdist/
 var/
+bin/
+include/
+local/
+lib/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -76,9 +80,6 @@ vagrantconfig.yml
 
 # Local settings
 local_settings.py
-
-# .DS_Store
-.DS_Store
 
 # dist
 dist/
