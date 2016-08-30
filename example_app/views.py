@@ -43,21 +43,23 @@ class PlayersViewSet(FiltersMixin, viewsets.ModelViewSet):
         query parameters in the URL.
         """
         query_params = self.request.query_params
+        url_params = self.kwargs
+
+        # get queryset_filters from FilterMixin
+        queryset_filters = self.get_db_filters(url_params, query_params)
+
+        # This dict will hold filter kwargs to pass in to Django ORM calls.
+        db_filters = queryset_filters['db_filters']
+
+        # This dict will hold exclude kwargs to pass in to Django ORM calls.
+        db_excludes = queryset_filters['db_excludes']
+
+        # fetch queryset from Players model
         queryset = Player.objects.prefetch_related(
             'teams'  # use prefetch_related to minimize db hits.
         ).all()
 
-        # This dict will hold filter kwargs to pass in to Django ORM calls.
-        db_filters = {}
-
-        # update filters dict with incoming query params and then pass as
-        # **kwargs to queryset.filter()
-        db_filters.update(
-            self.get_queryset_filters(
-                query_params
-            )
-        )
-        return queryset.filter(**db_filters)
+        return queryset.filter(**db_filters).exclude(**db_excludes)
 
 
 class TeamsViewSet(FiltersMixin, viewsets.ModelViewSet):
@@ -90,18 +92,21 @@ class TeamsViewSet(FiltersMixin, viewsets.ModelViewSet):
         Optionally restricts the queryset by filtering against
         query parameters in the URL.
         """
+
         query_params = self.request.query_params
+        url_params = self.kwargs
+
+        # get queryset_filters from FilterMixin
+        queryset_filters = self.get_db_filters(url_params, query_params)
+
+        # This dict will hold filter kwargs to pass in to Django ORM calls.
+        db_filters = queryset_filters['db_filters']
+
+        # This dict will hold exclude kwargs to pass in to Django ORM calls.
+        db_excludes = queryset_filters['db_excludes']
+
         queryset = Team.objects.prefetch_related(
             'players'
         ).all()
 
-        # This dict will hold filter kwargs to pass in to Django ORM calls.
-        db_filters = {}
-
-        # filters on mercant queryset
-        db_filters.update(
-            self.get_queryset_filters(
-                query_params
-            )
-        )
-        return queryset.filter(**db_filters)
+        return queryset.filter(**db_filters).exclude(**db_excludes)
