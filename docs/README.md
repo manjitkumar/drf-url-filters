@@ -8,7 +8,7 @@ on incoming query params and their values. A beautiful python package voluptouos
 ---
 **Installation**
 
-1. Download `drf-url-filters` app package from this git repo or can be isnatlled using python-pip like `pip install drf-url-filters`.
+1. Download `drf-url-filters` app package from this git repo or can be installed using python-pip like `pip install drf-url-filters`.
 
 2. Add `filters` in INSTALLED_APPS of settings.py file of django project.
 
