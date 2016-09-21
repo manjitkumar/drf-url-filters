@@ -8,7 +8,7 @@ on incoming query params and their values. A beautiful python package voluptouos
 ---
 **Installation**
 
-1. Download `drf-url-filters` app package from this git repo or can be installed using python-pip like `pip install drf-url-filters`.
+1. Download `drf-url-filters` app package from this git repo or can be isnatlled using python-pip like `pip install drf-url-filters`.
 
 2. Add `filters` in INSTALLED_APPS of settings.py file of django project.
 
@@ -90,22 +90,23 @@ class PlayersViewSet(FiltersMixin, viewsets.ModelViewSet):
         query parameters in the URL.
         """
         query_params = self.request.query_params
+        url_params = self.kwargs
+
+        # get queryset_filters from FilterMixin
+        queryset_filters = self.get_db_filters(url_params, query_params)
+
+        # This dict will hold filter kwargs to pass in to Django ORM calls.
+        db_filters = queryset_filters['db_filters']
+
+        # This dict will hold exclude kwargs to pass in to Django ORM calls.
+        db_excludes = queryset_filters['db_excludes']
+
+        # fetch queryset from Players model
         queryset = Player.objects.prefetch_related(
             'teams'  # use prefetch_related to minimize db hits.
         ).all()
 
-        # This dict will hold filter kwargs to pass in to Django ORM calls.
-        db_filters = {}
-
-        # update filters dict with incoming query params and then pass as
-        # **kwargs to queryset.filter()
-        db_filters.update(
-            self.get_queryset_filters(
-                query_params
-            )
-        )
-        return queryset.filter(**db_filters)
-
+        return queryset.filter(**db_filters).exclude(**db_excludes)
 ```
 
 With the use of `drf-url-filters` adding a new filter on a new column is as simple as adding a new key in the dict. Prohibitting a filter on particular column is same as removing a key value mapping from the `filter_mappings` dict.
@@ -117,7 +118,7 @@ Copyright (c) 2016 Manjit Kumar
 Read more about it in LICENSE file available in repo.
 
 # Credits
-Special thanks to authors of [voluptouos](https://github.com/alecthomas/voluptuous) and friends [*](https://github.com/cdax) [**](https://github.com/SaurabhJha) who encourage people to contribute into open source community.
+Special thanks to authors of [voluptouos](https://github.com/alecthomas/voluptuous) and friends [saurabhjha](https://github.com/cdax) [cdax](https://github.com/SaurabhJha) who encourage people to contribute into open source community.
 
 # Support
 Please [open an issue](https://github.com/manjitkumar/drf-url-filters/issues/new) for support.
