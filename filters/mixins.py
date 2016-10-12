@@ -37,9 +37,13 @@ class FiltersMixin(object):
 
             for query, value in query_params.iteritems():
                 # [1] ~ sign is used to exclude a filter.
-                is_exclude = '~' in query
+                is_exclude = query.startswith("~")
+                if is_exclude:
+                    query = query[1:]
+
                 if query in self.filter_mappings and value:
                     query = filter_mappings[query]
+
                     # [2] multiple options is filter values will execute as `IN` query
                     if isinstance(value, list):
                         query += '__in'
