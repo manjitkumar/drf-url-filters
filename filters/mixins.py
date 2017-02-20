@@ -51,7 +51,7 @@ class FiltersMixin(object):
 
         return dict(filters), dict(excludes)
 
-    def __merge_query_params(url_params, query_params):
+    def __merge_query_params(self, url_params, query_params):
         '''
         merges the url_params dict with query_params query dict and returns
         the merged dict.
