@@ -6,7 +6,7 @@ from .validations import (
 
 # make a base query param schema, which can be extended for api
 # specific requirements.
-base_query_param_schema = Schema(
+base_query_params_schema = Schema(
         {
             'q': unicode,
             'name': unicode,
