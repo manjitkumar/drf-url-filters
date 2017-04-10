@@ -6,7 +6,7 @@ sys.path.insert(0, '.')
 try:
     import atexit
     import pypandoc
-    README = pypandoc.convert('README.md', 'rst')
+    README = pypandoc.convert('README.md', 'rst', 'markdown')
     with open('README.rst', 'w') as f:
         f.write(README)
     atexit.register(lambda: os.unlink('README.rst'))
@@ -19,7 +19,7 @@ except (ImportError, OSError):
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 __name__ = 'drf-url-filters'
-__version__ = '0.2.1'
+__version__ = '0.3.0'
 __author__ = 'Manjit Kumar'
 __author_email__ = 'manjit1727@gmail.com'
 __url__ = 'https://github.com/manjitkumar/drf-url-filters'

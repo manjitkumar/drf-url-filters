@@ -1,4 +1,5 @@
 # This module is define and keep all generic type of data-validations.
+import six
 import re
 from voluptuous import Invalid
 from django.utils.dateparse import parse_datetime, parse_date
@@ -15,10 +16,10 @@ def IntegerLike(msg=None):
     def fn(value):
         if not (
             isinstance(value, int) or
-            isinstance(value, long) or
             (isinstance(value, float) and value.is_integer()) or
             (isinstance(value, str) and value.isdigit()) or
-            (isinstance(value, unicode) and value.isdigit())
+            ((isinstance(value, unicode) and value.isdigit() or
+            isinstance(value, long)) if six.PY2 else None)
         ):
             raise Invalid(msg or (
                 'Invalid input <{0}>; expected an integer'.format(value))
@@ -39,10 +40,10 @@ def Alphanumeric(msg=None):
     def fn(value):
         if not (
             isinstance(value, int) or
-            isinstance(value, long) or
             (isinstance(value, float) and value.is_integer()) or
             (isinstance(value, str) and value.isalnum()) or
-            (isinstance(value, unicode) and value.isalnum())
+            ((isinstance(value, unicode) and value.isdigit() or
+            isinstance(value, long)) if six.PY2 else None)
         ):
             raise Invalid(msg or (
                 'Invalid input <{0}>; expected an integer'.format(value))
@@ -64,7 +65,7 @@ def StrictlyAlphanumeric(msg=None):
     '''
     def fn(value):
         if not (
-            (isinstance(value, str) or isinstance(value, unicode)) and
+            (isinstance(value, str) or (isinstance(value, unicode) if six.PY2 else None)) and
             re_alphabets.search(value) and
             re_digits.search(value)
         ):
@@ -101,15 +102,15 @@ def CSVofIntegers(msg=None):
     '''
     def fn(value):
         try:
-            if isinstance(value, unicode):
+            if isinstance(value, six.text_type):
                 if ',' in value:
-                    value = map(
+                    value = list(map(
                         int, filter(
-                            bool, map(
+                            bool, list(map(
                                 lambda x: x.strip(), value.split(',')
-                            )
+                            ))
                         )
-                    )
+                    ))
                     return value
                 else:
                     return [int(value)]

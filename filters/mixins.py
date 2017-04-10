@@ -1,3 +1,4 @@
+import six
 from voluptuous import Invalid
 from rest_framework.exceptions import ParseError
 
@@ -37,7 +38,11 @@ class FiltersMixin(object):
             except Invalid as inst:
                 raise ParseError(detail=inst)
 
-            for query, value in query_params.iteritems():
+            iterable_query_params = (
+                query_params.iteritems() if six.PY2 else query_params.items()
+            )
+
+            for query, value in iterable_query_params:
                 # [1] ~ sign is used to exclude a filter.
                 is_exclude = '~' in query
                 if query in self.filter_mappings and value:

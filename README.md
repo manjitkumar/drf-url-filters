@@ -29,8 +29,9 @@ to query you want to make on the column name on the queryset.
 # validations.py
 
 ```python
+import six
 
-from filters.schema import base_query_param_schema
+from filters.schema import base_query_params_schema
 from filters.validations import (
     CSVofIntegers,
     IntegerLike,
@@ -41,7 +42,7 @@ from filters.validations import (
 players_query_schema = base_query_param_schema.extend(
     {
         "id": IntegerLike(),
-        "name": unicode,
+        "name": six.text_type,  # Depends on python version
         "team_id": CSVofIntegers(),  # /?team_id=1,2,3
         "install_ts": DatetimeWithTZ(),
         "update_ts": DatetimeWithTZ(),
