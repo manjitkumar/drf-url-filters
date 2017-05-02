@@ -1,3 +1,4 @@
+import six
 from voluptuous import Schema, ALLOW_EXTRA
 from .validations import (
     IntegerLike,
@@ -8,8 +9,8 @@ from .validations import (
 # specific requirements.
 base_query_params_schema = Schema(
         {
-            'q': unicode,
-            'name': unicode,
+            'q': six.text_type,
+            'name': six.text_type,
             'offset': IntegerLike(),
             'limit': IntegerLike(),
             'install_ts': DatetimeWithTZ(),
