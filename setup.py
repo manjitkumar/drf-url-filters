@@ -32,9 +32,9 @@ setup(
     packages=['filters'],
     include_package_data=True,
     description=(
-                    'A django app to apply filters on drf querysets '
-                    'using query params with validations using voluptuous.'
-                ),
+        'A django app to apply filters on drf querysets '
+        'using query params with validations using voluptuous.'
+    ),
     long_description=README,
     url=__url__,
     download_url=__download_url__,
@@ -51,5 +51,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 2.7',
     ],
-    keywords='drf-url-filters, filters, queryparamters',
+    keywords='drf-url-filters, filters, queryparameters',
+    test_suite='nose2.collector.collector',
+    tests_require=['nose2'],
 )
