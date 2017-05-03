@@ -1,7 +1,6 @@
 # This module is define and keep all generic type of data-validations.
 import sys
 import numbers
-import re
 from voluptuous import Invalid
 from django.utils.dateparse import parse_datetime, parse_date
 
@@ -54,10 +53,6 @@ def Alphanumeric(msg=None):
     return fn
 
 
-re_alphabets = re.compile('[A-Za-z]')
-re_digits = re.compile('[0-9]')
-
-
 def StrictlyAlphanumeric(msg=None):
     '''
     Checks whether a value is:
@@ -65,11 +60,12 @@ def StrictlyAlphanumeric(msg=None):
         - composed of both alphabets and digits
     '''
     def fn(value):
-        if not all([
-            isinstance(value, basestring),
-            re_alphabets.search(value),
-            re_digits.search(value)
-        ]):
+        if not (
+            isinstance(value, basestring) and
+            value.isalnum() and not
+            value.isdigit() and not
+            value.isalpha()
+        ):
             raise Invalid(msg or (
                 'Invalid input <{0}>; expected an integer'.format(value))
             )
@@ -115,6 +111,8 @@ def CSVofIntegers(msg=None):
                     return value
                 else:
                     return [int(value)]
+            else:
+                raise ValueError
         except ValueError:
             raise Invalid(
                 '<{0}> is not a valid csv of integers'.format(value)
