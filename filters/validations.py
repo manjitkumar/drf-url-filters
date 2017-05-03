@@ -42,7 +42,7 @@ def Alphanumeric(msg=None):
             isinstance(value, int) or
             (isinstance(value, float) and value.is_integer()) or
             (isinstance(value, str) and value.isalnum()) or
-            ((isinstance(value, unicode) and value.isdigit() or
+            ((isinstance(value, unicode) and value.isalnum() or
             isinstance(value, long)) if six.PY2 else None)
         ):
             raise Invalid(msg or (
