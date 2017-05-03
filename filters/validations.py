@@ -1,8 +1,13 @@
 # This module is define and keep all generic type of data-validations.
-import six
+import sys
+import numbers
 import re
 from voluptuous import Invalid
 from django.utils.dateparse import parse_datetime, parse_date
+
+# Forward compatibility with Python 3.x
+if sys.version_info.major == 3:
+    basestring = str
 
 
 def IntegerLike(msg=None):
@@ -14,13 +19,11 @@ def IntegerLike(msg=None):
         - str or unicode composed only of digits
     '''
     def fn(value):
-        if not (
-            isinstance(value, int) or
-            (isinstance(value, float) and value.is_integer()) or
-            (isinstance(value, str) and value.isdigit()) or
-            ((isinstance(value, unicode) and value.isdigit() or
-            isinstance(value, long)) if six.PY2 else None)
-        ):
+        if not any([
+            isinstance(value, numbers.Integral),
+            (isinstance(value, float) and value.is_integer()),
+            (isinstance(value, basestring) and value.isdigit())
+        ]):
             raise Invalid(msg or (
                 'Invalid input <{0}>; expected an integer'.format(value))
             )
@@ -38,13 +41,11 @@ def Alphanumeric(msg=None):
         - str or unicode composed only of alphanumeric characters
     '''
     def fn(value):
-        if not (
-            isinstance(value, int) or
-            (isinstance(value, float) and value.is_integer()) or
-            (isinstance(value, str) and value.isalnum()) or
-            ((isinstance(value, unicode) and value.isdigit() or
-            isinstance(value, long)) if six.PY2 else None)
-        ):
+        if not any([
+            isinstance(value, numbers.Integral),
+            (isinstance(value, float) and value.is_integer()),
+            (isinstance(value, basestring) and value.isalnum())
+        ]):
             raise Invalid(msg or (
                 'Invalid input <{0}>; expected an integer'.format(value))
             )
@@ -64,11 +65,11 @@ def StrictlyAlphanumeric(msg=None):
         - composed of both alphabets and digits
     '''
     def fn(value):
-        if not (
-            (isinstance(value, str) or (isinstance(value, unicode) if six.PY2 else None)) and
-            re_alphabets.search(value) and
+        if not all([
+            isinstance(value, basestring),
+            re_alphabets.search(value),
             re_digits.search(value)
-        ):
+        ]):
             raise Invalid(msg or (
                 'Invalid input <{0}>; expected an integer'.format(value))
             )
@@ -97,12 +98,12 @@ def DatetimeWithTZ(msg=None):
 def CSVofIntegers(msg=None):
     '''
     Checks whether a value is list of integers.
-    Returns list of integers or just one integer in 
+    Returns list of integers or just one integer in
     list if there is only one element in given CSV string.
     '''
     def fn(value):
         try:
-            if isinstance(value, six.text_type):
+            if isinstance(value, basestring):
                 if ',' in value:
                     value = list(map(
                         int, filter(
