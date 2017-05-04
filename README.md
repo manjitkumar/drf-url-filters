@@ -17,7 +17,7 @@ installed using python-pip like `pip install drf-url-filters`.
 
 2. Add `filters` in INSTALLED_APPS of settings.py file of django project.
 
-**How it works?**
+**How it works**
 
 1. Your View or ModelViewSet should inherit `FiltersMixin` from
 `filters.mixins.FiltersMixin`.
@@ -25,6 +25,11 @@ installed using python-pip like `pip install drf-url-filters`.
 2. To apply filters using `drf-url-filters` we need to configure our view to
 have a dict mapping `filter_mappings` which converts incoming query parameters
 to query you want to make on the column name on the queryset.
+
+3. Optionally, to perform any preprocessing on the incoming values for
+query params, add another dict `filter_value_transformations` which maps
+incoming query parameters to functions that should be applied to the values
+corresponding to them. The resultant value is used in the final filtering.
 
 # validations.py
 
@@ -46,6 +51,7 @@ players_query_schema = base_query_param_schema.extend(
         "team_id": CSVofIntegers(),  # /?team_id=1,2,3
         "install_ts": DatetimeWithTZ(),
         "update_ts": DatetimeWithTZ(),
+        "taller_than": IntegerLike(),
     }
 )
 ```
@@ -88,6 +94,11 @@ class PlayersViewSet(FiltersMixin, viewsets.ModelViewSet):
         'update_ts': 'update_ts',
         'update_ts__gte': 'update_ts__gte',
         'update_ts__lte': 'update_ts__lte',
+        'taller_than': 'height__gte',
+    }
+
+    field_value_transformations = {
+        'taller_than': lambda val: val / 30.48  # cm to ft
     }
 
     # add validation on filters
