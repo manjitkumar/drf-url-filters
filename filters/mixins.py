@@ -26,6 +26,7 @@ class FiltersMixin(object):
 
         if getattr(self, 'filter_mappings', None) and query_params:
             filter_mappings = self.filter_mappings
+            value_transformations = getattr(self, 'filter_value_transformations', {})
 
             try:
                 # check and raise 400_BAD_REQUEST for invalid query params
@@ -46,15 +47,16 @@ class FiltersMixin(object):
                 # [1] ~ sign is used to exclude a filter.
                 is_exclude = '~' in query
                 if query in self.filter_mappings and value:
-                    query = filter_mappings[query]
+                    query_filter = filter_mappings[query]
+                    transform_value = value_transformations.get(query, lambda val: val)
+                    transformed_value = transform_value(value)
                     # [2] multiple options is filter values will execute as `IN` query
-                    if isinstance(value, list):
-                        query += '__in'
-                    if value:
-                        if is_exclude:
-                            excludes.append((query, value))
-                        else:
-                            filters.append((query, value))
+                    if isinstance(value, list) and not query_filter.endswith('__in'):
+                        query_filter += '__in'
+                    if is_exclude:
+                        excludes.append((query_filter, transformed_value))
+                    else:
+                        filters.append((query_filter, transformed_value))
 
         return dict(filters), dict(excludes)
 
