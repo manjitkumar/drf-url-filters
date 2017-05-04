@@ -143,7 +143,7 @@ def CSVOfModelChoices(msg=None, EXISTING_CHOICES=None):
                 return value
         except:
             raise Invalid(msg)
-return fn
+    return fn
 
 
 CSVofAlphanumeric = partial(

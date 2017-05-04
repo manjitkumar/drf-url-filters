@@ -10,4 +10,4 @@ def csv_validator(validator, invalid_msg, msg=None):
         except ValueError:
             raise Invalid('<{0}> '.format(value) + invalid_msg.format(value))
 
-return fn
+    return fn
