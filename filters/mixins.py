@@ -2,6 +2,7 @@ import six
 from voluptuous import Invalid
 from rest_framework.exceptions import ParseError
 
+from .metaclasses import MetaFiltersMixin
 from .schema import base_query_params_schema
 
 
@@ -11,6 +12,7 @@ class FiltersMixin(object):
     filters by applying defined filters on generic
     queryset.
     '''
+    __metaclass__ = MetaFiltersMixin
 
     def __get_queryset_filters(self, query_params, *args, **kwargs):
         '''
@@ -87,3 +89,11 @@ class FiltersMixin(object):
             'db_filters': db_filters,
             'db_excludes': db_excludes,
         }
+
+    def get_queryset(self):
+        # Defined here to handle the case where the viewset
+        # does not override get_queryset
+        # (and hence the metaclass would not have been
+        # able to decorate it with the filtering logic.)
+
+        return super(FiltersMixin, self).get_queryset()
