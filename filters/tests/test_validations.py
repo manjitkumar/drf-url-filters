@@ -1,6 +1,7 @@
 import unittest
 from nose2.tools.such import helper
 from voluptuous import Invalid
+from django.core.exceptions import ImproperlyConfigured
 from filters import validations
 
 INT = 1
@@ -75,3 +76,27 @@ class CSVofIntegersTestCase(BaseValidationTestCase, unittest.TestCase):
         NON_INT_UNICODE, NON_ALNUM_STR, NON_ALNUM_UNICODE, NON_INT_CSV,
         INT, LONG
     ]
+
+class GenericSeparatedValidatorTestCase(unittest.TestCase):
+    def test_default_separator(self):
+        validator = validations.GenericSeparatedValidator(int)
+        self.assertEqual(validator('1,2,3'), [1,2,3])
+        self.assertRaises(Invalid, validator, 'a,b,c')
+        self.assertEqual(validator('1', [1]))
+
+    def test_custom_separator(self):
+        validator = validations.GenericSeparatedValidator(int, 'mm')
+        self.assertEqual(validator('1mm2mm3'), [1,2,3])
+        self.assertRaises(Invalid, validator, 'ammbmmc')
+        self.assertEqual(validator('1', [1]))
+
+    def test_custom_type(self):
+        validator = validations.GenericSeparatedValidator(
+                        validations.IntegerLike())
+        self.assertEqual(validator('1,2,3'), ['1','2','3'])
+        self.assertRaises(Invalid, validator, 'a,b,c')
+        self.assertEqual(validator('1', ['1']))
+
+    def test_invalid_separator(self):
+        self.assertRaises(ImproperlyConfigured, 
+            validations.GenericSeparatedValidator, 12)
