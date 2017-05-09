@@ -17,6 +17,10 @@ NON_ALNUM_STR = "hello 123"
 NON_ALNUM_UNICODE = unicode(NON_ALNUM_STR)
 INT_CSV = "1,2,3"
 NON_INT_CSV = "a,b,c"
+ALNUM_STR_CSV = "hello123,world239,python3"
+ALNUM_STR_UNICODE_CSV = unicode(ALNUM_STR_CSV)
+NON_ALNUM_STR_CSV = "hello123, world 239,python 3"
+NON_ALNUM_STR_UNICODE_CSV = unicode(NON_ALNUM_STR_CSV)
 
 
 class BaseValidationTestCase(object):
@@ -74,4 +78,39 @@ class CSVofIntegersTestCase(BaseValidationTestCase, unittest.TestCase):
         INT_FLOAT, ALNUM_STR, ALNUM_UNICODE, NON_INT_FLOAT, NON_INT_STR,
         NON_INT_UNICODE, NON_ALNUM_STR, NON_ALNUM_UNICODE, NON_INT_CSV,
         INT, LONG
+    ]
+
+
+class CSVofModelChoicesTestCase(BaseValidationTestCase, unittest.TestCase):
+    base_function = validations.CSVofModelChoices
+    transform_val = lambda self, v:  map(v.split(","))
+    valid_values = [NON_INT_CSV, ALNUM_STR]
+    invalid_values = [
+        INT_FLOAT, ALNUM_UNICODE, NON_INT_FLOAT, NON_INT_STR,
+        NON_INT_UNICODE, NON_ALNUM_STR, NON_ALNUM_UNICODE,
+        INT, LONG, INT_CSV, INT_STR, INT_UNICODE
+    ]
+
+
+class CSVofAlphanumericTestCase(BaseValidationTestCase, unittest.TestCase):
+    base_function = validations.CSVofAlphanumeric
+    transform_val = lambda self, v:  map(v.split(","))
+    valid_values = [
+        INT, LONG, INT_FLOAT, INT_STR, INT_UNICODE, ALNUM_STR,
+        NON_ALNUM_UNICODE, ALNUM_STR_CSV, ALNUM_STR_UNICODE_CSV
+    ]
+    invalid_values = [
+        NON_INT_FLOAT, NON_INT_STR, NON_INT_UNICODE, NON_ALNUM_STR,
+        NON_ALNUM_UNICODE
+    ]
+
+
+class CSVofStrictlyAlphanumericTestCase(BaseValidationTestCase, unittest.TestCase):
+    base_function = validations.CSVofStrictlyAlphanumeric
+    transform_val = lambda self, v:  map(v.split(","))
+    valid_values = [ALNUM_STR, ALNUM_UNICODE, ALNUM_STR_CSV, ALNUM_STR_UNICODE_CSV]
+    invalid_values = [
+        INT_FLOAT, NON_INT_FLOAT, NON_INT_STR,
+        NON_INT_UNICODE, NON_ALNUM_STR, NON_ALNUM_UNICODE,
+        INT, LONG, INT_CSV, INT_STR, INT_UNICODE
     ]
