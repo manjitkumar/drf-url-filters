@@ -6,13 +6,13 @@ from .metaclasses import MetaFiltersMixin
 from .schema import base_query_params_schema
 
 
+@six.add_metaclass(MetaFiltersMixin)
 class FiltersMixin(object):
     '''
     This viewset provides dynamically generated
     filters by applying defined filters on generic
     queryset.
     '''
-    __metaclass__ = MetaFiltersMixin
 
     def __get_queryset_filters(self, query_params, *args, **kwargs):
         '''

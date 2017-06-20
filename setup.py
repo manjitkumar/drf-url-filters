@@ -19,7 +19,7 @@ except (ImportError, OSError):
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 __name__ = 'drf-url-filters'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __author__ = 'Manjit Kumar'
 __author_email__ = 'manjit1727@gmail.com'
 __url__ = 'https://github.com/manjitkumar/drf-url-filters'
