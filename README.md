@@ -100,7 +100,7 @@ class PlayersViewSet(FiltersMixin, viewsets.ModelViewSet):
         'taller_than': 'height__gte',
     }
 
-    field_value_transformations = {
+    filter_value_transformations = {
         'taller_than': lambda val: val / 30.48  # cm to ft
     }
 
