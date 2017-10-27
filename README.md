@@ -124,5 +124,4 @@ Special thanks to authors of
 who encourage people to contribute into open source community.
 
 # Support
-Please [open an issue]
-(https://github.com/manjitkumar/drf-url-filters/issues/new) for support.
+Please [open an issue](https://github.com/manjitkumar/drf-url-filters/issues/new) for support.
