@@ -1,5 +1,7 @@
 # drf-url-filters
 
+[![Help Contribute to Open Source](https://www.codetriage.com/manjitkumar/drf-url-filters/badges/users.svg)](https://www.codetriage.com/manjitkumar/drf-url-filters)
+
 **drf-url-filters** is a simple django app to apply filters on drf
 modelviewset's queryset in a clean, simple and configurable way. It also
 supports validations on incoming query params and their values. A beautiful
