@@ -5,9 +5,9 @@
 **drf-url-filters** is a simple django app to apply filters on drf
 modelviewset's queryset in a clean, simple and configurable way. It also
 supports validations on incoming query params and their values. A beautiful
-python package [voluptouos](https://github.com/alecthomas/voluptuous) is being
+python package [voluptuous](https://github.com/alecthomas/voluptuous) is being
 used for validations on the incoming query parameters. The best part about
-voluptouos is you can define your own validations as per your query params
+voluptuous is you can define your own validations as per your query params
 requirements.
 
 # Quick start
@@ -121,7 +121,7 @@ Copyright (c) 2016 Manjit Kumar.
 
 # Credits
 Special thanks to authors of
-[voluptouos](https://github.com/alecthomas/voluptuous) and friends
+[voluptuous](https://github.com/alecthomas/voluptuous) and friends
 [cdax](https://github.com/cdax) and [saurabhjha](https://github.com/SaurabhJha)
 who encourage people to contribute into open source community.
 
