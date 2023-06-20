@@ -14,5 +14,5 @@ def decorate_get_queryset(f):
         # This dict will hold exclude kwargs to pass in to Django ORM calls.
         db_excludes = queryset_filters['db_excludes']
 
-        return queryset.filter(**db_filters).exclude(**db_excludes)
+        return queryset.filter(**db_filters).exclude(**db_excludes).distinct()
     return decorated
